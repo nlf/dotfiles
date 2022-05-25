@@ -34,7 +34,11 @@ setopt ERR_EXIT PIPEFAIL
       _failed=1
     else
       _log "> Bootstrap complete!"
-      [[ -f "${_bootstrap_root}/postinstall.txt" ]] && _log "$(cat ${_bootstrap_root}/postinstall.txt)"
+      if [[ -f "${_bootstrap_components}/private/repo" ]]; then
+        [[ -f "${_bootstrap_root}/postinstall/has-private.txt" ]] && _log "$(<${_bootstrap_root}/postinstall/has-private.txt)"
+      else
+        [[ -f "${_bootstrap_root}/postinstall/no-private.txt" ]] && _log "$(<${_bootstrap_root}/postinstall/no-private.txt)"
+      fi
     fi
 
     if (( ${+_bootstrap_tail_pid} )); then

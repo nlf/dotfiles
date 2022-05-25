@@ -6,3 +6,4 @@ To finish setup:
 3. Run `gh auth login`
 4. Open Secretive, create a new key
 5. Copy the "Public Key Path" from Secretive, add it to GitHub `gh ssh-key add $pathtokey --title="my awesome laptop"`
+6. (Optional) Create a file at `./components/private/repo` containing the full git url to private components, and re-run `./bootstrap`
