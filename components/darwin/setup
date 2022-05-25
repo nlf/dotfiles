@@ -109,5 +109,5 @@ setopt ERR_EXIT PIPEFAIL
   _defaults_write com.apple.Safari UniversalSearchEnabled -bool false
   _defaults_write com.apple.Safari SuppressSearchSuggestions -bool true
   _defaults_write com.apple.Safari AutoOpenSafeDownloads -bool false
-  _deafults_write com.apple.Safari SendDoNotTrackHTTPHeader -bool true
+  _defaults_write com.apple.Safari SendDoNotTrackHTTPHeader -bool true
 } "$@"
