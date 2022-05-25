@@ -1,0 +1,8 @@
+
+To finish setup:
+
+1. Login to Google (System Preferences -> Internet Accounts)
+2. Login to Slack
+3. Run `gh auth login`
+4. Open Secretive, create a new key
+5. Copy the "Public Key Path" from Secretive, add it to GitHub `gh ssh-key add $pathtokey --title="my awesome laptop"`

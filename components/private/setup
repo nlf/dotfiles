@@ -1,0 +1,23 @@
+#!/usr/bin/env zsh
+
+() {
+  [[ ! -f "${_bootstrap_components}/private/repo" ]] && return
+
+  local privaterepo=$(<${_bootstrap_components}/private/repo)
+  privaterepo="${privaterepo//$'\n'/}"
+
+  local privatedata="${_bootstrap_components}/private/data"
+  if [[ ! -d "$privatedata" ]]; then
+    _log "> Cloning $privaterepo"
+    git clone "$privaterepo" "${_bootstrap_components}/private/data"
+  else
+    _log "> Updating private data"
+    pushd "$privatedata"
+    git pull
+    popd
+  fi
+
+  for private_component in ${_bootstrap_components}/private/data/*(/); do
+    [[ -f "${private_component}/setup" ]] && source "${private_component}/setup"
+  done
+} "$@"

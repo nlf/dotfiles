@@ -1,0 +1,13 @@
+#!/usr/bin/env zsh
+
+() {
+  local platform=${$(uname -s):l}
+  local sshconfig="${_bootstrap_components}/ssh/config"
+  [[ -f "${sshconfig}.${platform}" ]] && sshconfig="${sshconfig}.${platform}"
+  if [[ ! -d "$HOME/.ssh" ]]; then
+    _log "> Creating $HOME/.ssh"
+    mkdir -p "$HOME/.ssh"
+    chmod 700 "$HOME/.ssh"
+  fi
+  [[ -f "$sshconfig" ]] && _bootstrap_link "$sshconfig" "$HOME/.ssh/config"
+} "$@"

@@ -1,0 +1,5 @@
+#!/usr/bin/env zsh
+
+() {
+  _bootstrap_link "${_bootstrap_components}/kitty" "$HOME/.config/kitty"
+} "$@"

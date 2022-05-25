@@ -1,0 +1,9 @@
+#!/usr/bin/env zsh
+
+() {
+  _bootstrap_link "${_bootstrap_components}/zsh/zshenv" "$HOME/.zshenv"
+  source $HOME/.zshenv
+
+  _bootstrap_link "${_bootstrap_components}/zsh/zshrc" "$HOME/.zshrc"
+  source $HOME/.zshrc
+} "$@"

@@ -1,0 +1,5 @@
+#!/usr/bin/env zsh
+
+() {
+  _bootstrap_link "${_bootstrap_components}/powerlevel10k/p10k.zsh" "$HOME/.p10k.zsh"
+} "$@"

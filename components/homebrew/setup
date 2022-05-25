@@ -1,0 +1,41 @@
+#!/usr/bin/env zsh
+
+() {
+  local platform=${$(uname -s):l}
+  local arch=$(uname -m)
+
+  local prefix=/usr/local
+  local repo=/usr/local/homebrew
+
+  if [[ $platform == "darwin" && $arch == "arm64" ]]; then
+    prefix=/opt/homebrew
+    repo=/opt/homebrew
+  fi
+
+  if [[ ! -d "$repo" ]]; then
+    _log "> Installing homebrew"
+    if [[ $prefix == "/usr/local" ]]; then
+      sudo mkdir -p $repo
+      _log "> Adjusting permissions of $repo"
+      sudo chown root:wheel $repo
+    else
+      mkdir -p $repo
+    fi
+    _log "> Extracting homebrew"
+    curl -fsSL https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C $repo
+    _log "> Correcting permissions of share directory"
+    sudo chmod 755 "${prefix}/share"
+  fi
+
+  local zshrc="${_bootstrap_components}/homebrew/zshrc"
+  [[ $platform == "darwin" && $arch == "arm64" ]] && zshrc="${zshrc}.darwin.arm64"
+
+  _bootstrap_link "$zshrc" "$HOME/.zshrc.homebrew"
+  source "$HOME/.zshrc.homebrew"
+
+  _log "> Running \`brew update\`"
+  brew update
+
+  _log "> Running \`brew bundle install --file=${_bootstrap_components}/homebrew/Brewfile\`"
+  brew bundle install --no-lock --file=${_bootstrap_components}/homebrew/Brewfile
+} "$@"
