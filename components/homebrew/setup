@@ -16,12 +16,12 @@
     _log "> Installing homebrew"
     if [[ $prefix == "/usr/local" ]]; then
       sudo mkdir -p $repo
+      sudo chown "${USER}:admin" "$repo"
       _log "> Extracting homebrew"
-      curl -fsSL https://github.com/Homebrew/brew/tarball/master | sudo tar xz --strip 1 -C $repo
-      _log "> Adjusting permissions of $repo"
-      sudo chown -R "${USER}:admin" "$repo"
+      curl -fsSL https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C $repo
       sudo ln -sf "${repo}/bin/brew" "${prefix}/bin/brew"
-      sudo mkdir -p "${prefix}/share"
+      sudo mkdir -p "${prefix}"/{Cellar,Caskroom,Frameworks,bin,etc,include,lib,opt,sbin,share,var}
+      sudo chown "${USER}:admin" "${prefix}"/{Cellar,Caskroom,Frameworks,bin,etc,include,lib,opt,sbin,share,var}
     else
       mkdir -p $repo
       _log "> Extracting homebrew"
