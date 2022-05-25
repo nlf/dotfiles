@@ -18,11 +18,13 @@
       sudo mkdir -p $repo
       _log "> Adjusting permissions of $repo"
       sudo chown root:wheel $repo
+      _log "> Extracting homebrew"
+      curl -fsSL https://github.com/Homebrew/brew/tarball/master | sudo tar xz --strip 1 -C $repo
     else
       mkdir -p $repo
+      _log "> Extracting homebrew"
+      curl -fsSL https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C $repo
     fi
-    _log "> Extracting homebrew"
-    curl -fsSL https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C $repo
     _log "> Correcting permissions of share directory"
     sudo chmod 755 "${prefix}/share"
   fi
