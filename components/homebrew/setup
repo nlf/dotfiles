@@ -12,7 +12,7 @@
     repo=/opt/homebrew
   fi
 
-  if [[ ! -d "$repo" ]]; then
+  if [[ ! -d "$repo" || ! -f "${prefix}/bin/brew" ]]; then
     _log "> Installing homebrew"
     if [[ $prefix == "/usr/local" ]]; then
       sudo mkdir -p $repo
