@@ -20,6 +20,7 @@
       sudo chown root:wheel $repo
       _log "> Extracting homebrew"
       curl -fsSL https://github.com/Homebrew/brew/tarball/master | sudo tar xz --strip 1 -C $repo
+      sudo ln -sf "${repo}/bin/brew" "${prefix}/bin/brew"
       sudo mkdir -p "${prefix}/share"
     else
       mkdir -p $repo
