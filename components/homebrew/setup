@@ -20,10 +20,12 @@
       sudo chown root:wheel $repo
       _log "> Extracting homebrew"
       curl -fsSL https://github.com/Homebrew/brew/tarball/master | sudo tar xz --strip 1 -C $repo
+      sudo mkdir -p "${prefix}/share"
     else
       mkdir -p $repo
       _log "> Extracting homebrew"
       curl -fsSL https://github.com/Homebrew/brew/tarball/master | tar xz --strip 1 -C $repo
+      mkdir -p "${prefix}/share"
     fi
     _log "> Correcting permissions of share directory"
     sudo chmod 755 "${prefix}/share"
