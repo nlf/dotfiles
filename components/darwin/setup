@@ -110,4 +110,9 @@ setopt ERR_EXIT PIPEFAIL
   _defaults_write com.apple.Safari SuppressSearchSuggestions -bool true
   _defaults_write com.apple.Safari AutoOpenSafeDownloads -bool false
   _defaults_write com.apple.Safari SendDoNotTrackHTTPHeader -bool true
+
+  if [[ ! -d "$HOME/.config" ]]; then
+    _log "> Creating $HOME/.config"
+    mkdir -p $HOME/.config
+  fi
 } "$@"
