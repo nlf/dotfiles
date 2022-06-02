@@ -21,6 +21,8 @@ require('packer').startup({function (use)
     config = function ()
       vim.opt.background = 'dark'
       vim.cmd('colorscheme gruvbox')
+      -- link the MarkSignHL highlight group to GruvboxOrangeSign
+      vim.highlight.link('MarkSignHL', 'GruvboxOrangeSign', true)
     end,
   }
 
@@ -31,6 +33,13 @@ require('packer').startup({function (use)
   use {'ethanholz/nvim-lastplace',
     config = function ()
       require('nvim-lastplace').setup()
+    end,
+  }
+
+  -- enhanced marks
+  use {'chentoast/marks.nvim',
+    config = function ()
+      require('marks').setup()
     end,
   }
 
