@@ -431,3 +431,10 @@ vim.o.undoreload = 10000
 -- case insensitive search unless capital used
 vim.o.ignorecase = true
 vim.o.smartcase = true
+
+-- neovide settings
+if vim.g.neovide then
+  vim.o.guifont = 'Hack Nerd Font Mono:h14'
+  vim.g.neovide_scroll_animation_length = 0.0
+  vim.g.neovide_cursor_animation_length = 0.0
+end
