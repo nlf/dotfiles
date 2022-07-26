@@ -265,7 +265,7 @@ require('packer').startup({function (use)
 
       require('nvim-lsp-installer').on_server_ready(function (server)
         local opts = {
-          on_attach = function (client, bufnr)
+          on_attach = function (_, bufnr)
             local wk = require('which-key')
             wk.register({
               d = {
@@ -298,6 +298,13 @@ require('packer').startup({function (use)
               ['<M-k>'] = { vim.lsp.buf.signature_help, 'Signature help', mode = 'i' },
             }, { buffer = bufnr })
           end,
+          settings = {
+            Lua = {
+              diagnostics = {
+                globals = {'vim'},
+              },
+            },
+          },
         }
 
         if server_opts[server.name] then
@@ -331,12 +338,12 @@ require('packer').startup({function (use)
       -- functions to ensure an encoding is passed so we don't get warnings logged
       local _jump_to_location = vim.lsp.util.jump_to_location
       vim.lsp.util.jump_to_location = function (opts, enc)
-        local enc = enc or 'utf-8'
+        enc = enc or 'utf-8'
         return _jump_to_location(opts, enc)
       end
       local _locations_to_items = vim.lsp.util.locations_to_items
       vim.lsp.util.locations_to_items = function (items, enc)
-        local enc = enc or 'utf-8'
+        enc = enc or 'utf-8'
         return _locations_to_items(items, enc)
       end
       telescope.load_extension('lsp_handlers')
