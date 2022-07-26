@@ -53,11 +53,37 @@ require('packer').startup({function (use)
   -- keymap documentation window
   use {'folke/which-key.nvim',
     config = function ()
-      require('which-key').setup({
+      local wk = require('which-key')
+      wk.setup({
         window = {
           border = 'rounded',
         },
       })
+
+      local Terminal = require('term')
+      local term = Terminal:new()
+
+      local open = function ()
+        term:open()
+      end
+
+      local close = function ()
+        term:close()
+      end
+
+      local focus_last = function ()
+        term:focus_last()
+      end
+
+      wk.register({
+        ['<leader>t'] = { open, 'Open terminal' },
+        ['<leader>y'] = { close, 'Close terminal' },
+      }, { mode = 'n' })
+
+      wk.register({
+        ['<esc><esc>'] = { focus_last, 'Focus last window' },
+        ['<esc>y'] = { close, 'Close terminal' },
+      }, { mode = 't' })
     end,
   }
 
