@@ -14,9 +14,11 @@ elif [[ -x /usr/local/bin/brew ]]; then
   eval "$(/usr/local/bin/brew shellenv)"
 fi
 
-echo "> Installing chezmoi..."
-brew update >/dev/null 2>&1
-brew install chezmoi
+if ! brew ls --versions chezmoi >/dev/null; then
+  echo "> Installing chezmoi..."
+  brew update >/dev/null 2>&1
+  brew install chezmoi
+fi
 
 echo "> Applying chezmoi..."
 chezmoi init --apply --verbose https://github.com/nlf/dotfiles.git
