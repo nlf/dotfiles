@@ -1,0 +1,5 @@
+README.md
+setup.sh
+{{- if ne .chezmoi.os "darwin" }}
+.gitconfig
+{{- end }}

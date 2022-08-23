@@ -1,0 +1,49 @@
+[core]
+  pager = delta
+[interactive]
+  diffFilter = delta
+[user]
+	email = {{ .email }}
+	name = {{ .github }}
+  {{- if ne .pubkey "REPLACEME" }}
+  signingKey = {{ .pubkey }}
+  {{- end }}
+{{- if ne .pubkey "REPLACEME" }}
+[gpg]
+  format = ssh
+[gpg "ssh"]
+  allowedSignersFile = ~/.config/git/allowed_signers
+[commit]
+	gpgsign = true
+[tag]
+	forcesignannotated = true
+{{- end }}
+[fetch]
+	prune = true
+	pruneTags = true
+[init]
+	defaultBranch = main
+[push]
+	followTags = true
+  autoSetupRemote = true
+[pull]
+	rebase = true
+	followTags = true
+[github]
+	user = {{ .github }}
+[merge]
+	conflictstyle = diff3
+[alias]
+	really-clean = clean -d -x -f -e '/node_modules'
+[branch]
+  autosetuprebase = always
+  autosetupmerge = true
+[diff]
+  colorMoved = default
+[delta]
+  navigate=true
+  syntax-theme=gruvbox-dark
+  side-by-side=true
+  wrap-max-lines=0
+  color-only=true
+  max-line-length=0

@@ -1,0 +1,22 @@
+[diff]
+  exclude = ["scripts"]
+
+{{- $email := promptStringOnce . "email" "email address" }}
+{{- $github := promptStringOnce . "github" "github username" }}
+{{- $name := promptStringOnce . "name" "full name" }}
+
+{{- $pubkey := "" }}
+{{- if (and (hasKey . "pubkey") (ne .pubkey "REPLACEME")) }}
+  {{- $pubkey = .pubkey }}
+{{- else }}
+  {{- $pubkey = promptString "public ssh key path" }}
+  {{- if eq $pubkey "" }}
+    {{ $pubkey = "REPLACEME" }}
+  {{- end }}
+{{- end }}
+
+[data]
+  email = {{ $email | quote }}
+  github = {{ $github | quote }}
+  name = {{ $name | quote }}
+  pubkey = {{ $pubkey | quote }}

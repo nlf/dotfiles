@@ -1,0 +1,4 @@
+export CLICOLOR=1
+export GPG_TTY=$TTY
+export NEOVIDE_MULTIGRID=1
+export SSH_AUTH_SOCK="$HOME/Library/Containers/com.maxgoedjen.Secretive.SecretAgent/Data/socket.ssh"

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+stdin=$(cat -)
+
+if ! echo "$stdin" | grep -q init-author-email; then
+  stdin="init-author-email={{- .email }}\n${stdin}"
+fi
+
+if ! echo "$stdin" | grep -q init-author-name; then
+  stdin="init-author-name={{- .name }}\n${stdin}"
+fi
+
+echo "$stdin"

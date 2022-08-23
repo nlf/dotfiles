@@ -1,0 +1,20 @@
+#!/bin/bash
+# vi: ft=bash
+
+_log_warn () {
+  echo "\033[0;33mWARN\033[0m ${1}"
+}
+
+{{- if eq .pubkey "REPLACEME" }}
+_log_warn "missing public key path\n    to fix: open Secretive.app, create a new key, copy the path to the public key\n    and run \`chezmoi init --apply\`"
+{{- end }}
+
+if ! grep -q _authToken ~/.npmrc; then
+  _log_warn "npm is not logged in\n    to fix: \`npm login\`"
+fi
+
+if [[ ! -f ~/.config/gh/hosts.yml ]]; then
+  _log_warn "gh is not logged in\n    to fix: \`gh auth login\`"
+fi
+
+unset _log_warn

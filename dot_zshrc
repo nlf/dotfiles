@@ -1,0 +1,53 @@
+#!/usr/bin/env zsh
+#
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+() {
+  # set some options for all shells
+  setopt HIST_EXPIRE_DUPS_FIRST
+  setopt HIST_IGNORE_DUPS
+  setopt HIST_IGNORE_ALL_DUPS
+  setopt HIST_IGNORE_SPACE
+  setopt HIST_FIND_NO_DUPS
+  setopt HIST_SAVE_NO_DUPS
+  bindkey -e
+
+  # setup homebrew paths
+  if [[ -x /opt/homebrew/bin/brew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [[ -x /usr/local/bin/brew ]]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+  fi
+
+  # initialize completion
+  autoload -Uz compinit && compinit
+
+  # setup aliases
+  which exa >/dev/null && alias ls=exa
+  which bat >/dev/null && alias cat=bat
+  which kitty >/dev/null && alias ssh='kitty +kitten ssh'
+  if which nvim >/dev/null; then
+    alias vi=nvim
+    alias vim=nvim
+    export EDITOR=nvim
+  fi
+
+  # load fnm
+  which fnm >/dev/null && eval "$(fnm env --use-on-cd)"
+
+  # load powerlevel10k
+  if which brew && brew ls --versions powerlevel10k >/dev/null; then
+    local powerlevel10k="$(brew --prefix)/opt/powerlevel10k"
+    if [[ -d "$powerlevel10k" ]]; then
+      source "${powerlevel10k}/powerlevel10k.zsh-theme"
+      [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+    fi
+  fi
+
+  [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+} "$@"

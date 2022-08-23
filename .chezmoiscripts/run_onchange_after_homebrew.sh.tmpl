@@ -1,0 +1,15 @@
+#!/bin/bash
+# vi: ft=bash
+set -euo pipefail
+
+# Brewfile hash: {{ include "Brewfile.tmpl" | sha256sum }}
+
+if ! which brew >/dev/null; then
+  if [[ -x /opt/homebrew/bin/bundle ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+  elif [[ -x /usr/local/bin/brew ]]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+  fi
+fi
+
+brew bundle install
