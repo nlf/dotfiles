@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # install homebrew
-if ! which -s brew; then
+if ! which -s brew >/dev/null; then
   echo "> Installing homebrew..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi

@@ -41,7 +41,7 @@ fi
   which fnm >/dev/null && eval "$(fnm env --use-on-cd)"
 
   # load powerlevel10k
-  if which brew && brew ls --versions powerlevel10k >/dev/null; then
+  if which brew >/dev/null && brew ls --versions powerlevel10k >/dev/null; then
     local powerlevel10k="$(brew --prefix)/opt/powerlevel10k"
     if [[ -d "$powerlevel10k" ]]; then
       source "${powerlevel10k}/powerlevel10k.zsh-theme"
