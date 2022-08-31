@@ -24,6 +24,10 @@ fi
     eval "$(/usr/local/bin/brew shellenv)"
   fi
 
+  if [[ -d "$HOME/.cargo" ]]; then
+    export PATH="$HOME/.cargo/bin:$PATH"
+  fi
+
   # initialize completion
   autoload -Uz compinit && compinit
 
