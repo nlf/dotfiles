@@ -2,7 +2,7 @@
 # vi: ft=bash
 set -euo pipefail
 
-# Brewfile hash: {{ include "Brewfile.tmpl" | sha256sum }}
+# Brewfile hash: {{ include "dot_brewfile.tmpl" | sha256sum }}
 
 if ! which brew >/dev/null; then
   if [[ -x /opt/homebrew/bin/bundle ]]; then
@@ -12,4 +12,4 @@ if ! which brew >/dev/null; then
   fi
 fi
 
-brew bundle install --no-lock
+brew bundle install --no-lock -f ~/.brewfile
