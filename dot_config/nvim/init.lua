@@ -22,7 +22,7 @@ require('packer').startup({function (use)
       vim.opt.background = 'dark'
       vim.cmd('colorscheme gruvbox')
       -- link the MarkSignHL highlight group to GruvboxOrangeSign
-      vim.highlight.link('MarkSignHL', 'GruvboxOrangeSign', true)
+      vim.api.nvim_set_hl(0, 'MarkSignHL', { link = 'GruvboxOrangeSign' })
     end,
   }
 
@@ -257,9 +257,10 @@ require('packer').startup({function (use)
         ['tsserver'] = function (opts)
           local _on_attach = opts.on_attach
           opts.on_attach = function (client, bufnr)
-            client.resolved_capabilities.document_formatting = false
+            client.server_capabilities.documentFormattingProvider = false
             _on_attach(client, bufnr)
           end
+          opts.cmd = {'npm', 'exec', '--yes', '--package=typescript-language-server@latest', '--package=typescript', '--', 'typescript-language-server', '--stdio'}
         end,
       }
 
