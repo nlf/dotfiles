@@ -20,7 +20,7 @@ require('packer').startup({function (use)
   use {'ellisonleao/gruvbox.nvim',
     config = function ()
       vim.opt.background = 'dark'
-      vim.cmd('colorscheme gruvbox')
+      vim.cmd.colorscheme 'gruvbox'
       -- link the MarkSignHL highlight group to GruvboxOrangeSign
       vim.api.nvim_set_hl(0, 'MarkSignHL', { link = 'GruvboxOrangeSign' })
     end,
