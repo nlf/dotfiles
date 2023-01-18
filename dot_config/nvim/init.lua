@@ -16,18 +16,92 @@ require('packer').startup({function (use)
   -- self manage packer updates
   use {'wbthomason/packer.nvim'}
 
-  -- gruvbox theme
-  use {'ellisonleao/gruvbox.nvim',
+  -- theme
+  use {'shaunsingh/nord.nvim',
     config = function ()
-      vim.opt.background = 'dark'
-      vim.cmd.colorscheme 'gruvbox'
-      -- link the MarkSignHL highlight group to GruvboxOrangeSign
-      vim.api.nvim_set_hl(0, 'MarkSignHL', { link = 'GruvboxOrangeSign' })
+      vim.g.nord_borders = true
+      vim.g.nord_italic = false
+      require('nord').set()
+    end,
+  }
+
+  -- keymap documentation window
+  use {'folke/which-key.nvim',
+    config = function ()
+      require('which-key').setup({
+        window = {
+          border = 'rounded',
+        },
+        plugins = {
+          spelling = { enabled = true },
+        },
+      })
     end,
   }
 
   -- fancier windows
   use {'stevearc/dressing.nvim'}
+
+  -- statusline and bufferline
+  use {'nvim-lualine/lualine.nvim',
+    requires = {
+      'kyazdani42/nvim-web-devicons',
+      'SmiteshP/nvim-navic',
+    },
+    config = function ()
+      local navic = require('nvim-navic')
+      navic.setup()
+
+      local diff_source = function ()
+        local gitsigns = vim.b.gitsigns_status_dict
+        if gitsigns then
+          return {
+            added = gitsigns.added,
+            modified = gitsigns.changed,
+            removed = gitsigns.removed,
+          }
+        end
+      end
+
+      local filetype_fmt = function ()
+        return vim.fn.expand('%:~:.')
+      end
+
+      require('lualine').setup({
+        options = {
+          theme = 'nord',
+          component_separators = { left = ' ', right = ' ' },
+          section_separators = { left = ' ', right = ' ' },
+        },
+        tabline = {
+          lualine_a = {
+            { 'buffers', show_filename_only = false },
+          },
+        },
+        sections = {
+          lualine_a = {
+            { 'mode' },
+          },
+          lualine_b = {
+            { 'filetype', icon_only = false, fmt = filetype_fmt },
+          },
+          lualine_c = {
+            { 'diagnostics' },
+            { navic.get_location, cond = navic.is_available },
+          },
+          lualine_x = {
+          },
+          lualine_y = {
+            { 'b:gitsigns_head', icon = '' },
+            { 'diff', source = diff_source },
+          },
+          lualine_z = {
+            { 'location' },
+          },
+        },
+      })
+    end,
+  }
 
   -- remember last place in this file
   use {'ethanholz/nvim-lastplace',
@@ -46,44 +120,28 @@ require('packer').startup({function (use)
   -- git integration
   use {'lewis6991/gitsigns.nvim',
     config = function ()
-      require('gitsigns').setup()
-    end,
-  }
+      require('gitsigns').setup({
+        on_attach = function (bufnr)
+          local gs = package.loaded.gitsigns
+          local wk = require('which-key')
 
-  -- keymap documentation window
-  use {'folke/which-key.nvim',
-    config = function ()
-      local wk = require('which-key')
-      wk.setup({
-        window = {
-          border = 'rounded',
-        },
+          wk.register({
+            name = '+git',
+            s = { '<cmd>Gitsigns stage_hunk<cr>', 'Stage hunk' },
+            r = { '<cmd>Gitsigns reset_hunk<cr>', 'Reset hunk' },
+            S = { gs.stage_buffer, 'Stage buffer' },
+            u = { gs.undo_stage_hunk, 'Undo stage hunk' },
+            R = { gs.reset_buffer, 'Reset buffer' },
+            p = { gs.preview_hunk, 'Preview hunk' },
+            b = { function () gs.blame_line({ full = true }) end, 'Blame line' },
+            d = { gs.diffthis, 'Git diff' },
+          }, { prefix = '<leader>h', mode = 'n' })
+
+          wk.register({
+            ['ih'] = { '<cmd>Gitsigns select_hunk<cr>', 'Git hunk' },
+          }, { mode = { 'x', 'o' } })
+        end,
       })
-
-      local Terminal = require('term')
-      local term = Terminal:new()
-
-      local open = function ()
-        term:open()
-      end
-
-      local close = function ()
-        term:close()
-      end
-
-      local focus_last = function ()
-        term:focus_last()
-      end
-
-      wk.register({
-        ['<leader>t'] = { open, 'Open terminal' },
-        ['<leader>y'] = { close, 'Close terminal' },
-      }, { mode = 'n' })
-
-      wk.register({
-        ['<esc><esc>'] = { focus_last, 'Focus last window' },
-        ['<esc>y'] = { close, 'Close terminal' },
-      }, { mode = 't' })
     end,
   }
 
@@ -97,49 +155,6 @@ require('packer').startup({function (use)
           end,
         },
       })
-
-      local comment_after_line = function ()
-        local line = vim.fn.line('.')
-        local text = vim.fn.printf(vim.api.nvim_buf_get_option(0, 'commentstring'), ' ')
-        vim.fn.append(line, text)
-        vim.cmd('startinsert')
-        vim.api.nvim_win_set_cursor(0, { line + 1, #text + 1 })
-      end
-
-      local comment_before_line = function ()
-        local line = vim.fn.line('.')
-        local text = vim.fn.printf(vim.api.nvim_buf_get_option(0, 'commentstring'), ' ')
-        vim.fn.append(line - 1, text)
-        vim.cmd('startinsert')
-        vim.api.nvim_win_set_cursor(0, { line, #text + 1 })
-      end
-
-      local comment_end_of_line = function ()
-        local line = vim.fn.line('.')
-        local text = vim.fn.getline(line) .. ' ' .. vim.fn.printf(vim.api.nvim_buf_get_option(0, 'commentstring'), ' ')
-        vim.fn.setline(line, text)
-        vim.cmd('startinsert')
-        vim.api.nvim_win_set_cursor(0, { line, #text + 1 })
-      end
-
-      local wk = require('which-key')
-      wk.register({
-        c = {
-          name = "Comment",
-          c = 'Toggle line comment',
-          A = { comment_end_of_line, 'Add comment at end of line' },
-          o = { comment_after_line, 'Add comment on next line' },
-          O = { comment_before_line, 'Add comment on previous line' },
-        },
-      }, { prefix = 'g' })
-
-      wk.register({
-        ['gc'] = 'Comment',
-      }, { mode = 'o' })
-
-      wk.register({
-        ['gc'] = 'Comment',
-      }, { mode = 'v' })
     end,
   }
 
@@ -156,7 +171,15 @@ require('packer').startup({function (use)
           enable = true,
           enable_autocmd = false, -- for comment plugin integration
         },
-        ensure_installed = { "lua", "javascript", "typescript" },
+        ensure_installed = {
+          "bash",
+          "javascript",
+          "lua",
+          "markdown",
+          "markdown_inline",
+          "regex",
+          "typescript",
+        },
         highlight = { enable = true },
         indent = { enable = false },
         incremental_selection = { enable = true },
@@ -235,14 +258,20 @@ require('packer').startup({function (use)
       vim.diagnostic.config({
         virtual_text = {
           severity = { min = vim.diagnostic.severity.WARN },
-          source = true,
+          source = 'if_many',
+          spacing = 2,
         },
         signs = false,
         float = {
           border = 'rounded',
           focusable = false,
         },
+        severity_sort = true,
       })
+
+      require('lspconfig.ui.windows').default_options = {
+        border = 'rounded',
+      }
 
       -- put a border around signature help and hover
       vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
@@ -266,7 +295,11 @@ require('packer').startup({function (use)
 
       require('nvim-lsp-installer').on_server_ready(function (server)
         local opts = {
-          on_attach = function (_, bufnr)
+          on_attach = function (client, bufnr)
+            if client.server_capabilities.documentSymbolProvider then
+              require('nvim-navic').attach(client, bufnr)
+            end
+
             local wk = require('which-key')
             wk.register({
               d = {
@@ -314,111 +347,6 @@ require('packer').startup({function (use)
 
         server:setup(opts)
       end)
-    end,
-  }
-
-  -- telescope
-  use {'nvim-telescope/telescope.nvim',
-    requires = {
-      'nvim-lua/plenary.nvim',
-      'gbrlsnchs/telescope-lsp-handlers.nvim',
-    },
-    config = function ()
-      local telescope = require('telescope')
-      telescope.setup({
-        defaults = {
-          mappings = {
-            i = {
-              ['<esc>'] = require('telescope.actions').close,
-            },
-          },
-        },
-      })
-
-      -- HACK until the telescope-lsp-handlers package is patched, we wrap these two
-      -- functions to ensure an encoding is passed so we don't get warnings logged
-      local _jump_to_location = vim.lsp.util.jump_to_location
-      vim.lsp.util.jump_to_location = function (opts, enc)
-        enc = enc or 'utf-8'
-        return _jump_to_location(opts, enc)
-      end
-      local _locations_to_items = vim.lsp.util.locations_to_items
-      vim.lsp.util.locations_to_items = function (items, enc)
-        enc = enc or 'utf-8'
-        return _locations_to_items(items, enc)
-      end
-      telescope.load_extension('lsp_handlers')
-
-      require('which-key').register({
-        f = {
-          name = 'Find...',
-          b = { require('telescope.builtin').buffers, 'Buffers' },
-          c = { require('telescope.builtin').commands, 'Commands' },
-          f = { require('telescope.builtin').find_files, 'Files' },
-          g = { require('telescope.builtin').live_grep, 'Live grep' },
-        },
-      }, { prefix = '<leader>' })
-    end,
-  }
-
-  -- statusline and bufferline
-  use {'nvim-lualine/lualine.nvim',
-    requires = {
-      'kyazdani42/nvim-web-devicons',
-      'SmiteshP/nvim-gps',
-    },
-    config = function ()
-      local gps = require('nvim-gps')
-      gps.setup()
-
-      local diff_source = function ()
-        local gitsigns = vim.b.gitsigns_status_dict
-        if gitsigns then
-          return {
-            added = gitsigns.added,
-            modified = gitsigns.changed,
-            removed = gitsigns.removed,
-          }
-        end
-      end
-
-      local filetype_fmt = function ()
-        return vim.fn.expand('%:~:.')
-      end
-
-      require('lualine').setup({
-        options = {
-          theme = 'gruvbox',
-          component_separators = { left = ' ', right = ' ' },
-          section_separators = { left = ' ', right = ' ' },
-        },
-        tabline = {
-          lualine_a = {
-            { 'buffers', show_filename_only = false },
-          },
-        },
-        sections = {
-          lualine_a = {
-            { 'mode' },
-          },
-          lualine_b = {
-            { 'filetype', icon_only = false, fmt = filetype_fmt },
-          },
-          lualine_c = {
-            { 'diagnostics' },
-            { gps.get_location, cond = gps.is_available },
-          },
-          lualine_x = {
-          },
-          lualine_y = {
-            { 'b:gitsigns_head', icon = '' },
-            { 'diff', source = diff_source },
-          },
-          lualine_z = {
-            { 'location' },
-          },
-        },
-      })
     end,
   }
 end,
