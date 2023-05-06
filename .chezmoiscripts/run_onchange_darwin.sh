@@ -54,21 +54,21 @@ if [[ "$platform" == "darwin" ]]; then
   }
 
   ## enable firewall
-  # _defaults_write /Library/Preferences/com.apple.alf globalstate -int 1
-  # if [[ $? -eq -1 ]]; then
-  #   sudo launchctl load /System/Library/LaunchDaemons/com.apple.alf.agent.plist
-  # fi
+  _defaults_write /Library/Preferences/com.apple.alf globalstate -int 1
+  if [[ $? -eq -1 ]]; then
+    sudo launchctl load /System/Library/LaunchDaemons/com.apple.alf.agent.plist
+  fi
 
   ## configure screensaver to ask for password immediately
   _defaults_write com.apple.screensaver askForPassword -int 1
-  # _defaults_write com.apple.screensaver askForPasswordDelay -int 1
+  _defaults_write com.apple.screensaver askForPasswordDelay -int 1
 
   ## configure bottom left corner to start the screensaver
   _defaults_write com.apple.dock wvous-bl-corner -int 5
   _defaults_write com.apple.dock wvous-bl-modifier -int 0
 
   ## set clock to digital
-  # _defaults_write com.apple.menuextra.clock IsAnalog -bool false
+  _defaults_write com.apple.menuextra.clock IsAnalog -bool false
 
   ## hide date
   _defaults_write com.apple.menuextra.clock ShowDate -int 2
