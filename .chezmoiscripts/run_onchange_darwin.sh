@@ -61,7 +61,7 @@ if [[ "$platform" == "darwin" ]]; then
 
   ## configure screensaver to ask for password immediately
   _defaults_write com.apple.screensaver askForPassword -int 1
-  _defaults_write com.apple.screensaver askForPasswordDelay -int 1
+  # _defaults_write com.apple.screensaver askForPasswordDelay -int 1
 
   ## configure bottom left corner to start the screensaver
   _defaults_write com.apple.dock wvous-bl-corner -int 5
