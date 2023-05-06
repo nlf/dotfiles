@@ -79,7 +79,7 @@ if [[ "$platform" == "darwin" ]]; then
   _defaults_write -globalDomain NSAutomaticCapitalizationEnabled -int 0
   _defaults_write -globalDomain NSAutomaticDashSubstituionEnabled -int 0
   _defaults_write -globalDomain NSAutomaticPeriodSubstitutionEnabled -int 0
-  _defaults_write -globalDomain NSAutomaticQuoteSubstitutionEnabled -int 0
+  # _defaults_write -globalDomain NSAutomaticQuoteSubstitutionEnabled -int 0
   _defaults_write -globalDomain NSAutomaticSpellingCorrectionEnabled -int 0
   _defaults_write -globalDomain WebAutomaticSpellingCorrectionEnabled -int 0
 
@@ -100,9 +100,9 @@ if [[ "$platform" == "darwin" ]]; then
   _defaults_write com.apple.finder NewWindowTargetPath -string "file://${HOME}/"
 
   ## safari
-  _defaults_write com.apple.Safari UniversalSearchEnabled -bool false
-  _defaults_write com.apple.Safari SuppressSearchSuggestions -bool true
-  _defaults_write com.apple.Safari AutoOpenSafeDownloads -bool false
+  # _defaults_write com.apple.Safari UniversalSearchEnabled -bool false
+  # _defaults_write com.apple.Safari SuppressSearchSuggestions -bool true
+  # _defaults_write com.apple.Safari AutoOpenSafeDownloads -bool false
 
   unset _defaults_write
 fi
