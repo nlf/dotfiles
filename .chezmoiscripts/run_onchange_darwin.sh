@@ -67,9 +67,6 @@ if [[ "$platform" == "darwin" ]]; then
   _defaults_write com.apple.dock wvous-bl-corner -int 5
   _defaults_write com.apple.dock wvous-bl-modifier -int 0
 
-  ## set clock to digital
-  _defaults_write com.apple.menuextra.clock IsAnalog -bool false
-
   ## hide date
   _defaults_write com.apple.menuextra.clock ShowDate -int 2
   _defaults_write com.apple.menuextra.clock ShowDayOfMonth -int 0
