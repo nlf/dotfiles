@@ -11,4 +11,4 @@ if [[ "$(basename $(dscl . -read /Users/${USER} UserShell | cut -d' ' -f2))" != 
   fi
 fi
 
-fish -c "fisher install ilancosman/tide@v5"
+fish -c "fisher install ilancosman/tide@v5; set -U fish_greeting ''"
