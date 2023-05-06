@@ -54,10 +54,10 @@ if [[ "$platform" == "darwin" ]]; then
   }
 
   ## enable firewall
-  _defaults_write /Library/Preferences/com.apple.alf globalstate -int 1
-  if [[ $? -eq -1 ]]; then
-    launchctl load /System/Library/LaunchDaemons/com.apple.alf.agent.plist
-  fi
+  # _defaults_write /Library/Preferences/com.apple.alf globalstate -int 1
+  # if [[ $? -eq -1 ]]; then
+  #   sudo launchctl load /System/Library/LaunchDaemons/com.apple.alf.agent.plist
+  # fi
 
   ## configure screensaver to ask for password immediately
   _defaults_write com.apple.screensaver askForPassword -int 1
