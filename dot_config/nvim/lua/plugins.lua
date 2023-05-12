@@ -183,10 +183,10 @@ local lspconfig = {
   event = 'BufReadPre',
   opts = {
     icons = {
-      Error = ' ',
-      Warn = ' ',
-      Hint = ' ',
-      Info = ' ',
+      Error = '󰅚 ',
+      Warn = '󰀪 ',
+      Hint = '󰌶 ',
+      Info = '󰋽 ',
     },
     diagnostics = {
       flat = {
